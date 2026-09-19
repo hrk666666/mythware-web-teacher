@@ -94,6 +94,226 @@ input[type="text"]:focus {
     box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
 }
 
+.badge-broadcast {
+    background: rgba(250, 173, 20, 0.2);
+    color: #faad14;
+    border: 1px solid #faad14;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* 标签页 */
+.tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    background: white;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.tab-btn:hover {
+    background: #f5f5f5;
+}
+
+.tab-btn.active {
+    background: #667eea;
+    color: white;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* 屏幕监控 */
+.monitor-toolbar {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.monitor-toolbar h3 {
+    font-size: 18px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.screen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.screen-item {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+}
+
+.screen-item:hover {
+    transform: scale(1.02);
+}
+
+.screen-item-header {
+    padding: 10px 15px;
+    background: #fafafa;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.screen-item-header .ip {
+    color: #666;
+    font-weight: normal;
+    font-size: 12px;
+}
+
+.screen-item-body {
+    height: 160px;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.screen-item-body img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.screen-item-footer {
+    padding: 8px 15px;
+    font-size: 12px;
+    color: #999;
+}
+
+/* 屏幕广播 */
+.broadcast-panel {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.broadcast-panel h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.broadcast-controls {
+    margin: 25px 0;
+    display: flex;
+    gap: 15px;
+}
+
+.btn-lg {
+    padding: 14px 30px;
+    font-size: 16px;
+}
+
+.broadcast-status {
+    margin: 20px 0;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f5f5f5;
+}
+
+.broadcast-status.active {
+    background: #f6ffed;
+    border: 1px solid #b7eb8f;
+}
+
+.preview-box {
+    width: 100%;
+    max-width: 800px;
+    height: 450px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.preview-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.broadcast-info {
+    margin-top: 25px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.broadcast-info h4 {
+    margin-bottom: 10px;
+}
+
+.broadcast-info ul {
+    padding-left: 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+.broadcast-info li {
+    margin-bottom: 5px;
+}
+
+.broadcast-info code {
+    background: #e8e8e8;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: Consolas, monospace;
+}
+
+.text-muted {
+    color: #999;
+    font-size: 14px;
+}
+
 /* 按钮 */
 .btn {
     padding: 8px 16px;

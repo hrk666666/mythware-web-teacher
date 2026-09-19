@@ -3,107 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>极域教师端 - Web控制台</title>
+    <title>极域教师端 - Web控制台 v2.0</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
     <div class="container">
-        <!-- 顶部导航 -->
         <header class="header">
-            <h1>🖥️ 极域电子教室教师端</h1>
+            <h1>🖥️ 极域电子教室教师端 v2.0</h1>
             <div class="status-bar">
                 <span class="badge badge-online">在线 <span id="onlineCount">0</span></span>
                 <span class="badge badge-total">总计 <span id="totalCount">0</span></span>
+                <span class="badge badge-broadcast" id="broadcastBadge" style="display:none">📡 广播中</span>
             </div>
         </header>
 
-        <!-- 工具栏 -->
-        <div class="toolbar">
-            <div class="tool-group">
-                <input type="text" id="subnetInput" value="192.168.1.0/24" placeholder="网段，如 192.168.1.0/24">
-                <button class="btn btn-primary" onclick="scanNetwork()">🔍 扫描学生端</button>
-                <button class="btn btn-secondary" onclick="clearStudents()">🗑️ 清空列表</button>
-            </div>
-            <div class="tool-group">
-                <button class="btn btn-success" onclick="selectAll()">全选</button>
-                <button class="btn btn-warning" onclick="selectOnline()">选在线</button>
-                <button class="btn btn-danger" onclick="selectNone()">取消全选</button>
-            </div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="control">🎛️ 控制台</button>
+            <button class="tab-btn" data-tab="monitor">👁️ 屏幕监控</button>
+            <button class="tab-btn" data-tab="broadcast">📡 屏幕广播</button>
         </div>
 
-        <!-- 学生端列表 -->
-        <div class="main-content">
-            <div class="student-panel">
-                <h3>📋 学生端列表</h3>
-                <div class="table-container">
-                    <table id="studentTable">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="checkAll" onchange="toggleSelectAll()"></th>
-                                <th>IP地址</th>
-                                <th>主机名</th>
-                                <th>状态</th>
-                                <th>最后在线</th>
-                            </tr>
-                        </thead>
-                        <tbody id="studentList">
-                            <tr><td colspan="5" class="empty-tip">点击扫描按钮发现学生端</td></tr>
-                        </tbody>
-                    </table>
+        <!-- 控制台 -->
+        <div class="tab-content active" id="tab-control">
+            <div class="toolbar">
+                <div class="tool-group">
+                    <input type="text" id="subnetInput" value="192.168.1.0/24" placeholder="网段">
+                    <button class="btn btn-primary" onclick="scanNetwork()">🔍 扫描学生端</button>
+                    <button class="btn btn-secondary" onclick="clearStudents()">🗑️ 清空</button>
+                </div>
+                <div class="tool-group">
+                    <button class="btn btn-success" onclick="selectAll()">全选</button>
+                    <button class="btn btn-warning" onclick="selectOnline()">选在线</button>
+                    <button class="btn btn-danger" onclick="selectNone()">取消</button>
                 </div>
             </div>
 
-            <!-- 操作面板 -->
-            <div class="control-panel">
-                <h3>🎛️ 控制操作</h3>
-
-                <!-- 远程执行 -->
-                <div class="control-section">
-                    <h4>⚡ 远程执行</h4>
-                    <div class="form-row">
-                        <input type="text" id="execCmd" placeholder="程序路径，如 calc.exe" value="calc.exe">
+            <div class="main-content">
+                <div class="student-panel">
+                    <h3>📋 学生端列表</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="checkAll" onchange="toggleSelectAll()"></th>
+                                    <th>IP地址</th>
+                                    <th>主机名</th>
+                                    <th>状态</th>
+                                    <th>最后在线</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentList">
+                                <tr><td colspan="5" class="empty-tip">点击扫描按钮发现学生端</td></tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="form-row">
+                </div>
+
+                <div class="control-panel">
+                    <h3>🎛️ 控制操作</h3>
+
+                    <div class="control-section">
+                        <h4>⚡ 远程执行</h4>
+                        <input type="text" id="execCmd" placeholder="程序路径" value="calc.exe">
                         <input type="text" id="execParams" placeholder="参数（可选）">
+                        <button class="btn btn-primary btn-block" onclick="execCommand()">🚀 执行命令</button>
                     </div>
-                    <button class="btn btn-primary btn-block" onclick="execCommand()">🚀 执行命令</button>
-                </div>
 
-                <!-- 消息发送 -->
-                <div class="control-section">
-                    <h4>💬 发送消息</h4>
-                    <div class="form-row">
+                    <div class="control-section">
+                        <h4>💬 发送消息</h4>
                         <input type="text" id="msgText" placeholder="消息内容">
+                        <button class="btn btn-info btn-block" onclick="sendMessage()">📨 发送弹窗</button>
                     </div>
-                    <button class="btn btn-info btn-block" onclick="sendMessage()">📨 发送弹窗</button>
-                </div>
 
-                <!-- 电源控制 -->
-                <div class="control-section">
-                    <h4>⚡ 电源控制</h4>
-                    <div class="btn-group-2">
-                        <button class="btn btn-danger" onclick="powerControl(false)">🔴 关机</button>
-                        <button class="btn btn-warning" onclick="powerControl(true)">🔄 重启</button>
+                    <div class="control-section">
+                        <h4>⚡ 电源控制</h4>
+                        <div class="btn-group-2">
+                            <button class="btn btn-danger" onclick="powerControl(false)">🔴 关机</button>
+                            <button class="btn btn-warning" onclick="powerControl(true)">🔄 重启</button>
+                        </div>
                     </div>
-                </div>
 
-                <!-- 操作日志 -->
-                <div class="control-section">
-                    <h4>📝 操作日志</h4>
-                    <div class="log-container" id="logContainer">
-                        <div class="log-empty">暂无操作记录</div>
+                    <div class="control-section">
+                        <h4>📝 操作日志</h4>
+                        <div class="log-container" id="logContainer">
+                            <div class="log-empty">暂无操作记录</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 底部状态栏 -->
+        <!-- 屏幕监控 -->
+        <div class="tab-content" id="tab-monitor">
+            <div class="monitor-toolbar">
+                <h3>👁️ 屏幕监控</h3>
+                <div class="tool-group">
+                    <span class="text-muted">监控数量: <span id="screenCount">0</span></span>
+                    <button class="btn btn-primary" onclick="refreshScreens()">🔄 刷新</button>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="autoRefresh" checked onchange="toggleAutoRefresh()"> 自动刷新(3秒)
+                    </label>
+                </div>
+            </div>
+            <div class="screen-grid" id="screenGrid">
+                <div class="empty-tip">暂无学生屏幕数据</div>
+            </div>
+        </div>
+
+        <!-- 屏幕广播 -->
+        <div class="tab-content" id="tab-broadcast">
+            <div class="broadcast-panel">
+                <h3>📡 屏幕广播</h3>
+                <p class="text-muted">教师端屏幕将广播给所有运行学生代理的机器</p>
+
+                <div class="broadcast-controls">
+                    <button class="btn btn-success btn-lg" id="btnStartBroadcast" onclick="startBroadcast()">▶️ 开始广播</button>
+                    <button class="btn btn-danger btn-lg" id="btnStopBroadcast" onclick="stopBroadcast()" style="display:none">⏹️ 停止广播</button>
+                </div>
+
+                <div class="broadcast-status" id="broadcastStatus">
+                    <p id="broadcastStatusText">当前未在广播</p>
+                </div>
+
+                <div class="broadcast-preview">
+                    <h4>📺 预览</h4>
+                    <div class="preview-box" id="previewBox">
+                        <p class="text-muted">点击"开始广播"后开始录制屏幕</p>
+                    </div>
+                </div>
+
+                <div class="broadcast-info">
+                    <h4>ℹ️ 使用说明</h4>
+                    <ul>
+                        <li>学生端需运行 <code>student_agent.exe</code></li>
+                        <li>学生代理会自动连接教师端并接收广播</li>
+                        <li>广播为JPEG帧，通过HTTP传输</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <footer class="footer">
             <span>⚠️ 本工具仅限安全研究和自有机房测试使用</span>
         </footer>
     </div>
 
-    <!-- 结果弹窗 -->
     <div class="modal" id="resultModal">
         <div class="modal-content">
             <h3 id="modalTitle">操作结果</h3>
