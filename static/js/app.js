@@ -201,6 +201,66 @@ async function clearStudents() {
     addLog('清空', '学生端列表已清空');
 }
 
+// 屏幕广播
+async function startBroadcast() {
+    const targets = getSelectedIPs();
+    if (targets.length === 0) {
+        showModal('提示', '请先在控制台选择学生端');
+        return;
+    }
+    const fps = parseInt(document.getElementById('broadcastFps').value);
+    const quality = parseInt(document.getElementById('broadcastQuality').value);
+
+    const result = await api('/api/broadcast/start', 'POST', {
+        targets: targets,
+        fps: fps,
+        quality: quality
+    });
+
+    if (result.success) {
+        document.getElementById('btnStartBroadcast').style.display = 'none';
+        document.getElementById('btnStopBroadcast').style.display = 'inline-block';
+        document.getElementById('broadcastBadge').style.display = 'inline-block';
+        document.getElementById('broadcastStatusText').textContent = `广播中 - ${targets.length}台学生端，${fps}fps`;
+        document.getElementById('broadcastStatus').classList.add('active');
+    }
+}
+
+async function stopBroadcast() {
+    const result = await api('/api/broadcast/stop', 'POST');
+    if (result.success) {
+        document.getElementById('btnStartBroadcast').style.display = 'inline-block';
+        document.getElementById('btnStopBroadcast').style.display = 'none';
+        document.getElementById('broadcastBadge').style.display = 'none';
+        document.getElementById('broadcastStatusText').textContent = '当前未在广播';
+        document.getElementById('broadcastStatus').classList.remove('active');
+    }
+}
+
+// 屏幕监控请求
+async function requestMonitor() {
+    const targets = getSelectedIPs();
+    if (targets.length === 0) {
+        showModal('提示', '请先在控制台选择学生端');
+        return;
+    }
+    const result = await api('/api/monitor/request', 'POST', { targets: targets });
+    if (result.success) {
+        const r = result.results;
+        showModal('监控请求', `已向 ${r.success}/${r.total} 台学生端发送监控请求`);
+    }
+}
+
+// 标签页切换
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+    });
+});
+
 // 添加日志
 function addLog(action, detail) {
     const container = document.getElementById('logContainer');

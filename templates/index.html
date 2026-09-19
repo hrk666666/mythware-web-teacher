@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>极域教师端 - Web控制台 v2.0</title>
+    <title>极域教师端 - Web控制台 v3.0</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <h1>🖥️ 极域电子教室教师端 v2.0</h1>
+            <h1>🖥️ 极域电子教室教师端 v3.0</h1>
             <div class="status-bar">
                 <span class="badge badge-online">在线 <span id="onlineCount">0</span></span>
                 <span class="badge badge-total">总计 <span id="totalCount">0</span></span>
@@ -114,9 +114,27 @@
         <div class="tab-content" id="tab-broadcast">
             <div class="broadcast-panel">
                 <h3>📡 屏幕广播</h3>
-                <p class="text-muted">教师端屏幕将广播给所有运行学生代理的机器</p>
+                <p class="text-muted">通过原生极域协议将教师屏幕广播到官方学生端</p>
 
                 <div class="broadcast-controls">
+                    <div class="form-row">
+                        <label>帧率: </label>
+                        <select id="broadcastFps">
+                            <option value="3">3 fps</option>
+                            <option value="5" selected>5 fps</option>
+                            <option value="10">10 fps</option>
+                            <option value="15">15 fps</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label>画质: </label>
+                        <select id="broadcastQuality">
+                            <option value="40">低 (40%)</option>
+                            <option value="60" selected>中 (60%)</option>
+                            <option value="80">高 (80%)</option>
+                            <option value="90">极高 (90%)</option>
+                        </select>
+                    </div>
                     <button class="btn btn-success btn-lg" id="btnStartBroadcast" onclick="startBroadcast()">▶️ 开始广播</button>
                     <button class="btn btn-danger btn-lg" id="btnStopBroadcast" onclick="stopBroadcast()" style="display:none">⏹️ 停止广播</button>
                 </div>
@@ -125,19 +143,13 @@
                     <p id="broadcastStatusText">当前未在广播</p>
                 </div>
 
-                <div class="broadcast-preview">
-                    <h4>📺 预览</h4>
-                    <div class="preview-box" id="previewBox">
-                        <p class="text-muted">点击"开始广播"后开始录制屏幕</p>
-                    </div>
-                </div>
-
                 <div class="broadcast-info">
-                    <h4>ℹ️ 使用说明</h4>
+                    <h4>ℹ️ 协议说明</h4>
                     <ul>
-                        <li>学生端需运行 <code>student_agent.exe</code></li>
-                        <li>学生代理会自动连接教师端并接收广播</li>
-                        <li>广播为JPEG帧，通过HTTP传输</li>
+                        <li>学生端运行官方极域学生端，无需额外软件</li>
+                        <li>教师端通过TCP 7001发送广播握手命令</li>
+                        <li>学生端自动加入组播组 <code>225.2.2.11</code></li>
+                        <li>教师端截屏JPEG编码后通过组播发送分片帧</li>
                     </ul>
                 </div>
             </div>
