@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极域教师端 - Web控制台</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部导航 -->
+        <header class="header">
+            <h1>🖥️ 极域电子教室教师端</h1>
+            <div class="status-bar">
+                <span class="badge badge-online">在线 <span id="onlineCount">0</span></span>
+                <span class="badge badge-total">总计 <span id="totalCount">0</span></span>
+            </div>
+        </header>
+
+        <!-- 工具栏 -->
+        <div class="toolbar">
+            <div class="tool-group">
+                <input type="text" id="subnetInput" value="192.168.1.0/24" placeholder="网段，如 192.168.1.0/24">
+                <button class="btn btn-primary" onclick="scanNetwork()">🔍 扫描学生端</button>
+                <button class="btn btn-secondary" onclick="clearStudents()">🗑️ 清空列表</button>
+            </div>
+            <div class="tool-group">
+                <button class="btn btn-success" onclick="selectAll()">全选</button>
+                <button class="btn btn-warning" onclick="selectOnline()">选在线</button>
+                <button class="btn btn-danger" onclick="selectNone()">取消全选</button>
+            </div>
+        </div>
+
+        <!-- 学生端列表 -->
+        <div class="main-content">
+            <div class="student-panel">
+                <h3>📋 学生端列表</h3>
+                <div class="table-container">
+                    <table id="studentTable">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="checkAll" onchange="toggleSelectAll()"></th>
+                                <th>IP地址</th>
+                                <th>主机名</th>
+                                <th>状态</th>
+                                <th>最后在线</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentList">
+                            <tr><td colspan="5" class="empty-tip">点击扫描按钮发现学生端</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 操作面板 -->
+            <div class="control-panel">
+                <h3>🎛️ 控制操作</h3>
+
+                <!-- 远程执行 -->
+                <div class="control-section">
+                    <h4>⚡ 远程执行</h4>
+                    <div class="form-row">
+                        <input type="text" id="execCmd" placeholder="程序路径，如 calc.exe" value="calc.exe">
+                    </div>
+                    <div class="form-row">
+                        <input type="text" id="execParams" placeholder="参数（可选）">
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="execCommand()">🚀 执行命令</button>
+                </div>
+
+                <!-- 消息发送 -->
+                <div class="control-section">
+                    <h4>💬 发送消息</h4>
+                    <div class="form-row">
+                        <input type="text" id="msgText" placeholder="消息内容">
+                    </div>
+                    <button class="btn btn-info btn-block" onclick="sendMessage()">📨 发送弹窗</button>
+                </div>
+
+                <!-- 电源控制 -->
+                <div class="control-section">
+                    <h4>⚡ 电源控制</h4>
+                    <div class="btn-group-2">
+                        <button class="btn btn-danger" onclick="powerControl(false)">🔴 关机</button>
+                        <button class="btn btn-warning" onclick="powerControl(true)">🔄 重启</button>
+                    </div>
+                </div>
+
+                <!-- 操作日志 -->
+                <div class="control-section">
+                    <h4>📝 操作日志</h4>
+                    <div class="log-container" id="logContainer">
+                        <div class="log-empty">暂无操作记录</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部状态栏 -->
+        <footer class="footer">
+            <span>⚠️ 本工具仅限安全研究和自有机房测试使用</span>
+        </footer>
+    </div>
+
+    <!-- 结果弹窗 -->
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <h3 id="modalTitle">操作结果</h3>
+            <div id="modalBody"></div>
+            <button class="btn btn-primary" onclick="closeModal()">关闭</button>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
