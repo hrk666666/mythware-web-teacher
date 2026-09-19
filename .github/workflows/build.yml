@@ -32,18 +32,20 @@ jobs:
 
       - name: Build Teacher exe
         run: |
-          pyinstaller --onefile --name "MythwareTeacher" ^
-            --add-data "templates;templates" ^
-            --add-data "static;static" ^
-            --hidden-import flask ^
+          pyinstaller --onefile --name "MythwareTeacher" `
+            --add-data "templates;templates" `
+            --add-data "static;static" `
+            --hidden-import flask `
             app.py
+        shell: pwsh
 
       - name: Build Student Agent exe
         run: |
-          pyinstaller --onefile --name "MythwareStudentAgent" ^
-            --hidden-import PIL ^
-            --hidden-import requests ^
+          pyinstaller --onefile --name "MythwareStudentAgent" `
+            --hidden-import PIL `
+            --hidden-import requests `
             student_agent.py
+        shell: pwsh
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
