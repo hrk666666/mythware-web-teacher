@@ -16,7 +16,17 @@ from flask import Flask, render_template, jsonify, request, Response
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from core import PacketBuilder, StudentDiscovery, CommandSender, parse_ip_range
 
-app = Flask(__name__)
+# PyInstaller打包后资源路径处理
+if getattr(sys, 'frozen', False):
+    # 打包后运行
+    bundle_dir = sys._MEIPASS
+    template_dir = os.path.join(bundle_dir, 'templates')
+    static_dir = os.path.join(bundle_dir, 'static')
+    app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+else:
+    # 开发模式运行
+    app = Flask(__name__)
+
 app.config['JSON_AS_ASCII'] = False
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB
 
